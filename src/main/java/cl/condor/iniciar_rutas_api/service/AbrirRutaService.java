@@ -25,6 +25,15 @@ public class AbrirRutaService {
     }
 
     public AbrirRuta save(AbrirRuta abrirRuta) {
+        if (abrirRuta.getIdUsuario() == null || !abrirRutaRepository.existsById(abrirRuta.getIdUsuario())) {
+            throw new RuntimeException("La apertura no es realizable puesto que no está vinculada a un id de usuario válido");
+        }
+        if (abrirRuta.getIdRuta() == null || !abrirRutaRepository.existsById(abrirRuta.getIdRuta())) {
+            throw new RuntimeException("La apertura no es realizable puesto que no está vinculada a una id de ruta válida");
+        }
+        if (abrirRuta.getIdEstado() == null || !abrirRutaRepository.existsById(abrirRuta.getIdEstado())) {
+            throw new RuntimeException("La apertura no es realizable puesto que no está vinculada a un id de estado válido");
+        }
         return abrirRutaRepository.save(abrirRuta);
     }
 }

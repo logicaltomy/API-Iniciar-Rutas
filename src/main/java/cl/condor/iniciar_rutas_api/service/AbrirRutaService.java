@@ -14,17 +14,15 @@ import java.util.Map;
 
 @Service
 @Transactional
+
 public class AbrirRutaService {
     @Autowired
     private AbrirRutaRepository abrirRutaRepository;
-
     //para posibilitar los clientes que otorgarán su fk mediante el webclient
     @Autowired
     private EstadoClient estadoClient;
-
     @Autowired
     private RutaClient rutaClient;
-
     @Autowired
     private UsuarioClient usuarioClient;
 
@@ -43,19 +41,19 @@ public class AbrirRutaService {
     public AbrirRuta save(AbrirRuta abrirRuta) {
         // mapeando los string para traer sus id a partir de web client
         // dichos campos a rellenar ya se declararon previamente en el model
-        Map<String, Object> estado = estadoClient.getEstadosById(abrirRuta.getIdEstado());
-        Map<String, Object> ruta = rutaClient.getRutaById(abrirRuta.getIdRuta());
-        Map<String, Object> usuario = usuarioClient.getUsuarioById(abrirRuta.getIdUsuario());
-        if (estado == null || estado.isEmpty()) {
-            throw new RuntimeException("Estado no encontrado, no se puede guardar la apertura de la ruta");
-        }
-        if (ruta == null || ruta.isEmpty()) {
-            throw new RuntimeException("Ruta no encontrada, no se puede guardar la apertura de la ruta");
-        }
-        if (usuario == null || usuario.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado,no se puede guardar la apertura de la ruta");
-        }
+        if (abrirRuta.getIdUsuario() == null)
+            throw new RuntimeException("id_usuario es obligatorio");
+        if (abrirRuta.getIdRuta() == null)
+            throw new RuntimeException("id_ruta es obligatorio");
+        if (abrirRuta.getIdEstado() == null)
+            throw new RuntimeException("id_estado es obligatorio");
+
+        usuarioClient.getUsuarioById(abrirRuta.getIdUsuario());
+        rutaClient.getRutaById(abrirRuta.getIdRuta());
+        estadoClient.getEstadosById(abrirRuta.getIdEstado());
+
 
         return abrirRutaRepository.save(abrirRuta);
+
     }
 }

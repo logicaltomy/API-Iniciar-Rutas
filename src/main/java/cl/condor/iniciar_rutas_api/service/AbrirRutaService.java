@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -55,5 +54,21 @@ public class AbrirRutaService {
 
         return abrirRutaRepository.save(abrirRuta);
 
+    }
+
+    // si dejamos abrirRuta como null, el service la completa con now()
+
+    // Iniciar ruta es un valor por defecto
+    public AbrirRuta marcarInicio(Integer id) {
+        AbrirRuta abrirRuta = findById(id);
+        abrirRuta.setFInicio(java.time.LocalDateTime.now());
+        return abrirRutaRepository.save(abrirRuta); // UPDATE
+    }
+    // a futuro se tiene que corregir
+    // puesto que es un valor que depende de lo que el usuario ingrese en el aplicativo movil
+    public AbrirRuta marcarFin(Integer id) {
+        AbrirRuta abrirRuta = findById(id);
+        abrirRuta.setFFinal(java.time.LocalDateTime.now());
+        return abrirRutaRepository.save(abrirRuta); // UPDATE
     }
 }

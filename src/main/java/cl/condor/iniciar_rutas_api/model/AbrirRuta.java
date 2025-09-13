@@ -18,6 +18,9 @@ public class AbrirRuta {
     @Column(name = "f_abrir_ruta")
     private LocalDateTime fAbrirRuta;
 
+
+    // Ruta depende de tener un inicio y final (no debe incluirse como restriccion
+    // ya que dichos datos que corresponden a atributos mapeados a columnas se crean con la instanciación
     @Column(name = "f_inicio")
     private LocalDateTime fInicio;
 

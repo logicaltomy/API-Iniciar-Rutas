@@ -34,6 +34,16 @@ public class AbrirRutaService {
                 .orElseThrow(() -> new RuntimeException("AbrirRuta no encontrada"));
     }
 
+    //Se agrego esto con el fin de que sea ocupado por API Logros (No esta probado)
+    public List<AbrirRuta> findByIdUsuario(Integer id) {
+        List<AbrirRuta> rutas = abrirRutaRepository.findAbrirRutaByIdUsuario(id);
+
+        if (rutas.isEmpty()) {
+            throw new RuntimeException("No se encontraron rutas para el usuario con id " + id);
+        }
+
+        return rutas;
+    }
 
     // AbrirRuta depende de muchas tablas para crearla
     // Un total de 3 tablas/clases instanciadas y mapeadas

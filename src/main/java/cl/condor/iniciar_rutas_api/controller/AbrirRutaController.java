@@ -34,6 +34,17 @@ public class AbrirRutaController {
         }
     }
 
+    //Se agrego esto con el fin de que sea ocupado por API Logros (No esta probado)
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<AbrirRuta>> getAbrirRutaByIdUsuario(@PathVariable Integer id) {
+        try {
+            List<AbrirRuta> abrirRuta = abrirRutaService.findByIdUsuario(id);
+            return ResponseEntity.ok(abrirRuta);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<AbrirRuta> createAbrirRuta(@RequestBody AbrirRuta abrirRuta) {
         AbrirRuta saved = abrirRutaService.save(abrirRuta);

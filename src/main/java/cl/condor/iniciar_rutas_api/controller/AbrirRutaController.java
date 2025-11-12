@@ -3,8 +3,11 @@ package cl.condor.iniciar_rutas_api.controller;
 import cl.condor.iniciar_rutas_api.model.AbrirRuta;
 import cl.condor.iniciar_rutas_api.service.AbrirRutaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 
 import java.util.List;
 
@@ -47,7 +50,13 @@ public class AbrirRutaController {
 
     @PostMapping
     public ResponseEntity<AbrirRuta> createAbrirRuta(@RequestBody AbrirRuta abrirRuta) {
-        AbrirRuta saved = abrirRutaService.save(abrirRuta);
-        return ResponseEntity.status(201).body(saved);
+        try {
+            AbrirRuta saved = abrirRutaService.save(abrirRuta);
+            return ResponseEntity.status(201).body(saved);
+        }catch (WebClientRequestException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

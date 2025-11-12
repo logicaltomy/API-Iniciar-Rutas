@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -50,17 +51,14 @@ public class AbrirRutaService {
     public AbrirRuta save(AbrirRuta abrirRuta) {
         // mapeando los string para traer sus id a partir de web client
         // dichos campos a rellenar ya se declararon previamente en el model
-        if (abrirRuta.getIdUsuario() == null)
-            throw new RuntimeException("id_usuario es obligatorio");
-        if (abrirRuta.getIdRuta() == null)
-            throw new RuntimeException("id_ruta es obligatorio");
-        if (abrirRuta.getIdEstado() == null)
-            throw new RuntimeException("id_estado es obligatorio");
 
-        usuarioClient.getUsuarioById(abrirRuta.getIdUsuario());
-        rutaClient.getRutaById(abrirRuta.getIdRuta());
-        estadoClient.getEstadosById(abrirRuta.getIdEstado());
+        Map<String, Object> usuario = usuarioClient.getUsuarioById(abrirRuta.getIdUsuario());
+        Map<String, Object> ruta = rutaClient.getRutaById(abrirRuta.getIdRuta());
+        Map<String, Object> estado = estadoClient.getEstadosById(abrirRuta.getIdEstado());
 
+        if (usuario == null || usuario.isEmpty()) throw new RuntimeException("Usuario no encontrado");
+        if (ruta == null ||  ruta.isEmpty()) throw new RuntimeException("Ruta no encontrada");
+        if (estado == null || estado.isEmpty()) throw new RuntimeException("Estado no encontrada");
 
         return abrirRutaRepository.save(abrirRuta);
 

@@ -64,18 +64,12 @@ public class AbrirRutaService {
 
     }
 
-    // si dejamos abrirRuta como null, el service la completa con now()
 
-    // Iniciar ruta es un valor por defecto
-    public AbrirRuta marcarInicio(Integer id) {
-        AbrirRuta abrirRuta = findById(id);
-        abrirRuta.setFInicio(java.time.LocalDateTime.now());
-        return abrirRutaRepository.save(abrirRuta); // UPDATE
-    }
     // a futuro se tiene que corregir
     // puesto que es un valor que depende de lo que el usuario ingrese en el aplicativo movil
     public AbrirRuta marcarFin(Integer id) {
-        AbrirRuta abrirRuta = findById(id);
+        AbrirRuta abrirRuta = abrirRutaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("AbrirRuta no encontrada"));
         abrirRuta.setFFinal(java.time.LocalDateTime.now());
         return abrirRutaRepository.save(abrirRuta); // UPDATE
     }

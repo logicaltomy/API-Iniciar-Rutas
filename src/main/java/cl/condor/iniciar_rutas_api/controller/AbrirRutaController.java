@@ -20,11 +20,12 @@ public class AbrirRutaController {
     private AbrirRutaService abrirRutaService;
 
     @Operation(
-            summary = "Funcion que trae todas las rutas que se han inicializado",
-            description = """
-                    Te trae todas las rutas que se hayan realizado con 
-                    el usuario que la realizo.
-                    """
+        summary = "Listar todas las rutas inicializadas",
+        description = "Retorna todas las rutas que han sido inicializadas por cualquier usuario.",
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista de rutas inicializadas obtenida exitosamente."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No hay rutas inicializadas.")
+        }
     )
     @GetMapping
     public ResponseEntity<List<AbrirRuta>> getAllAbrirRuta() {
@@ -36,11 +37,12 @@ public class AbrirRutaController {
     }
 
     @Operation(
-            summary = "Funcion que trae una inicializacion de ruta por su id",
-            description = """
-                    Esta funcion te entrega la inicializacion que le hayas
-                    especificado que te traiga con su id correspondiente.
-                    """
+        summary = "Obtener inicialización de ruta por ID",
+        description = "Devuelve la inicialización de ruta correspondiente al ID especificado.",
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Inicialización encontrada."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Inicialización no encontrada.")
+        }
     )
     @GetMapping("/{id}")
     public ResponseEntity<AbrirRuta> getAbrirRutaById(@PathVariable Integer id) {
@@ -53,12 +55,12 @@ public class AbrirRutaController {
     }
 
     @Operation(
-            summary = "Esta funcion te entrega todas las rutas que haya realizado el usuario que especifiques",
-            description = """
-                    Esta funcion esta hecha para que le entregues la id de un
-                    usuario y esta te entregara todas las rutas que este 
-                    usuario haya realizado.
-                    """
+        summary = "Listar rutas inicializadas por usuario",
+        description = "Devuelve todas las rutas que ha realizado el usuario especificado por su ID.",
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista de rutas del usuario obtenida exitosamente."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Usuario o rutas no encontradas.")
+        }
     )
     @GetMapping("/usuario/{id}")
     public ResponseEntity<List<AbrirRuta>> getAbrirRutaByIdUsuario(@PathVariable Integer id) {
@@ -71,12 +73,23 @@ public class AbrirRutaController {
     }
 
     @Operation(
-            summary = "Post simple que sube la ruta que realizo un usuario",
-            description = """
-                    Esta funcion te crea la ruta con la finalidad principal
-                    que se pone automaticamente la fecha inicio de la ruta como
-                    la fecha actual.
-                    """
+        summary = "Registrar inicio de ruta",
+        description = "Crea una nueva inicialización de ruta para un usuario. La fecha de inicio se asigna automáticamente.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON con los datos de la inicialización de ruta.",
+            required = true,
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                mediaType = "application/json",
+                examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                    value = "{\n  \"id_usuario\": 1,\n  \"id_ruta\": 2\n}"
+                )
+            )
+        ),
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Inicialización de ruta creada exitosamente."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Datos inválidos o faltantes."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Servicio externo no disponible.")
+        }
     )
     @PostMapping
     public ResponseEntity<AbrirRuta> createAbrirRuta(@RequestBody AbrirRuta abrirRuta) {
@@ -91,12 +104,13 @@ public class AbrirRutaController {
     }
 
     @Operation(
-            summary = "Funcion que marca la fecha fin de la ruta realizada",
-            description = """
-                    Esta funcion actualiza la fecha fin de la ruta,
-                    con fin de diferenciar cuando una ruta esta o no en
-                    progreso.
-                    """
+        summary = "Marcar fin de ruta",
+        description = "Actualiza la fecha de fin de la ruta, diferenciando si está en progreso o finalizada.",
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Ruta marcada como finalizada exitosamente."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Inicialización de ruta no encontrada."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "503", description = "Servicio externo no disponible.")
+        }
     )
     @PatchMapping("/marcarFin/{id}")
     public ResponseEntity<AbrirRuta> marcarFin(@PathVariable Integer id) {
